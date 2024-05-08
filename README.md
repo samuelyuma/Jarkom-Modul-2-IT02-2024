@@ -604,13 +604,377 @@ service bind9 restart
 
 Karena pusat ingin sebuah website yang ingin digunakan untuk memantau kondisi markas lainnya maka deploy lah webiste ini (cek resource yg lb) pada **severny** menggunakan **apache**
 
+### Setup website pada severny
+
+a. Instalasi dependencies yang diperlukan 
+
+```
+apt-get update
+apt-get install lynx apache2 php libapache2-mod-php7.0 wget unzip -y
+```
+
+b. Buat file `it02.conf` pada `/etc/apache2/sites-available/`
+
+```
+cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/it02.conf
+```
+
+c. Hapus file `000-default.conf` pada `/etc/apache2/sites-enabled/` 
+
+```
+rm /etc/apache2/sites-enabled/000-default.conf
+```
+
+d. Edit file `it02.conf` pada `/etc/apache2/sites-available/` menjadi seperti berikut ini
+
+```
+<VirtualHost *:8080>
+ServerAdmin webmaster@localhost
+DocumentRoot /var/www/html
+</VirtualHost>
+```
+
+e. Tambahkan `Listen 8080` pada `/etc/apache2/ports.conf/` menjadi seperti berikut ini
+
+```
+Listen 80
+Listen 8080
+
+<IfModule ssl_module>
+    Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+    Listen 443
+</IfModule>
+```
+
+f. Nyalakan situs web yang telah di konfigurasi pada `it02.conf`
+
+```
+a2ensite it02.conf
+```
+
+g. Unduh file `index.php`, dan letakkan pada `/var/www/html/`
+
+```
+$ mkdir -p /var/www/html/configuration/
+
+$ wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1xn03kTB27K872cokqwEIlk8Zb121HnfB' -O /var/www/html/configuration/lb.zip
+
+$ unzip /var/www/html/configuration/lb.zip -d /var/www/html/configuration/
+
+$ mv /var/www/html/configuration/worker/index.php /var/www/html/
+
+$ rm -rf /var/www/html/configuration/
+```
+
+h. Nyalakan service apache
+
+
+```
+service apache2 start
+```
+
+i. Gunakan lynx untuk membuka website seperti berikut ini
+
+```
+lynx 192.234.1.4/index.php
+```
+
 ## Soal 13
 
 Tapi pusat merasa tidak puas dengan performanya karena traffic yag tinggi maka pusat meminta kita memasang load balancer pada web nya, dengan **Severny, Stalber, Lipovka** sebagai worker dan **Mylta** sebagai **Load Balancer** menggunakan apache sebagai web server nya dan load balancernya
 
+### Setup worker pada Severny, Stalber, dan Lipovka
+
+a. Instalasi dependencies yang diperlukan 
+
+```
+apt-get update
+apt-get install lynx apache2 php libapache2-mod-php7.0 wget unzip -y
+```
+
+b. Buat file `it02.conf` pada `/etc/apache2/sites-available/`
+
+```
+cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/it02.conf
+```
+
+c. Hapus file `000-default.conf` pada `/etc/apache2/sites-enabled/` 
+
+```
+rm /etc/apache2/sites-enabled/000-default.conf
+```
+
+d. Edit file `it02.conf` pada `/etc/apache2/sites-available/` menjadi seperti berikut ini
+
+```
+<VirtualHost *:8080>
+ServerAdmin webmaster@localhost
+DocumentRoot /var/www/html
+</VirtualHost>
+```
+
+e. Tambahkan `Listen 8080` pada `/etc/apache2/ports.conf/` menjadi seperti berikut ini
+
+```
+Listen 80
+Listen 8080
+
+<IfModule ssl_module>
+    Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+    Listen 443
+</IfModule>
+```
+
+f. Nyalakan situs web yang telah di konfigurasi pada `it02.conf`
+
+```
+a2ensite it02.conf
+```
+
+g. Unduh file `index.php`, dan letakkan pada `/var/www/html/`
+
+
+```
+$ mkdir -p /var/www/html/configuration/
+
+$ wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1xn03kTB27K872cokqwEIlk8Zb121HnfB' -O /var/www/html/configuration/lb.zip
+
+$ unzip /var/www/html/configuration/lb.zip -d /var/www/html/configuration/
+
+$ mv /var/www/html/configuration/worker/index.php /var/www/html/
+
+$ rm -rf /var/www/html/configuration/
+```
+
+h. Nyalakan service apache
+
+```
+service apache2 start
+```
+
+### Setup load balancer pada MyIta
+
+a. Instalasi dependencies yang diperlukan 
+
+```
+apt-get update
+apt-get install lynx apache2 -y
+```
+
+b. Nyalakan modul modul yang diperlukan
+
+```
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_balancer
+a2enmod lbmethod_byrequests
+```
+
+c. Jalankan service apache
+
+```
+service apache2 start
+```
+
+d. Edit file `default-8080.conf` pada `/etc/apache2/sites-available/` menjadi seperti berikut ini
+
+```
+<VirtualHost *:8080>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/it02
+
+    ProxyRequests Off
+    <Proxy balancer://mycluster>
+        BalancerMember http://192.234.1.4:8080
+        BalancerMember http://192.234.1.3:8080
+        BalancerMember http://192.234.1.2:8080
+        ProxySet lbmethod=byrequests
+    </Proxy>
+
+    ProxyPass / balancer://mycluster/
+    ProxyPassReverse / balancer://mycluster/
+</VirtualHost>
+```
+
+f. Nyalakan konfigurasi pada `it02.conf`
+
+```
+a2ensite it02.conf
+```
+
+g. restart service apache
+
+```
+service apache2 restart
+```
+
 ## Soal 14
 
 Mereka juga belum merasa puas jadi pusat meminta agar web servernya dan load balancer nya diubah menjadi nginx
+
+### Setup worker pada Severny, Stalber, dan Lipovka
+
+a. Instalasi dependencies yang diperlukan 
+
+```
+apt-get update
+apt-get install dnsutils lynx nginx apache2 libapache2-mod-php7.0 wget unzip php php-fpm -y
+```
+
+b. nyalakan service php-fpm
+
+```
+service php7.0-fpm start
+```
+
+c. nyalakan service nginx
+
+```
+service nginx start
+```
+
+d. unduh `index.php` dan letakkan pada `/var/www/html/`
+
+```
+$ mkdir -p /var/www/html/configuration/
+
+$ wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1xn03kTB27K872cokqwEIlk8Zb121HnfB' -O /var/www/html/configuration/lb.zip
+
+$ unzip /var/www/html/configuration/lb.zip -d /var/www/html/configuration/
+
+$ mv /var/www/html/configuration/worker/index.php /var/www/html/
+
+$ rm -rf /var/www/html/configuration/
+```
+
+e. Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
+
+```
+server {
+    listen 8082;
+
+    root /var/www/html;
+
+    index index.php index.html index.htm;
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+     deny all;
+    }
+
+    error_log /var/log/nginx/jarkom-it02_error.log;
+    access_log /var/log/nginx/jarkom-it02_access.log;
+}
+```
+
+f. buat symlink `it02` pada `/etc/nginx/sites-available/` di `/etc/nginx/sites-enabled`
+
+```
+ln -s /etc/nginx/sites-available/it02 /etc/nginx/sites-enabled
+```
+
+g. hapus `default` pada `/etc/nginx/sites-enabled/`
+
+```
+rm /etc/nginx/sites-enabled/default
+```
+
+h. Restart service nginx
+
+```
+service nginx restart
+```
+
+### Setup Load Balancer pada MyIta
+
+a. Instalasi dependencies yang diperlukan 
+
+```
+apt-get update
+apt-get install dnsutils nginx php-fpm php -y
+```
+
+b. nyalakan service php-fpm
+
+```
+service php7.0-fpm start
+```
+
+c. nyalakan service nginx
+
+```
+service nginx start
+```
+
+d. Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
+```
+upstream mylta {
+    server 192.234.1.2:8082; # Lipovka
+    server 192.234.1.3:8083; # Stalber
+    server 192.234.1.4:8084; # Severny
+}
+
+server {
+  listen 8082;
+  server_name 192.234.2.4;
+
+  location / {
+    proxy_pass http://mylta;
+  }
+}
+
+server {
+  listen 8083;
+  server_name 192.234.2.4;
+
+  location / {
+    proxy_pass http://mylta;
+  }
+}
+
+server {
+  listen 8084;
+  server_name 192.234.2.4;
+
+  location / {
+    proxy_pass http://mylta;
+  }
+}
+```
+
+e. buat symlink `it02` pada `/etc/nginx/sites-available/` di `/etc/nginx/sites-enabled`
+
+```
+ln -s /etc/nginx/sites-available/it02 /etc/nginx/sites-enabled
+```
+
+f. hapus `default` pada `/etc/nginx/sites-enabled/`
+
+```
+rm /etc/nginx/sites-enabled/default
+```
+
+g. Restart service nginx
+
+```
+service nginx restart
+```
 
 ## Soal 15
 
@@ -629,16 +993,164 @@ Karena dirasa kurang aman karena masih memakai IP markas ingin akses ke mylta me
 
 Agar aman, buatlah konfigurasi agar **mylta.xxx.com** hanya dapat diakses melalui port 14000 dan 14400.
 
+### Konfigurasi Nginx
+
+Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
+
+```
+upstream mylta {
+    server 192.234.1.2:8082; # Lipovka
+    server 192.234.1.3:8083; # Stalber
+    server 192.234.1.4:8084; # Severny
+}
+
+server {
+    listen 14000;
+    server_name mylta.it02.com;
+
+    location / {
+        proxy_pass http://mylta;
+    }
+}
+
+server {
+    listen 14400;
+    server_name mylta.it02.com;
+
+    location / {
+        proxy_pass http://mylta;
+    }
+}
+
+server {
+    listen 8082;
+    listen 8083;
+    listen 8084;
+    server_name 192.234.2.4;
+
+    return 404;
+}
+```
+
 ## Soal 18
 
 Apa bila ada yang mencoba mengakses IP mylta akan secara otomatis dialihkan ke **www.mylta.xxx.com**
 
-### Penyelesaian
+### Konfigurasi Nginx
+
+Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
+
+```
+upstream mylta {
+    server 192.234.1.2:8082; # Lipovka
+    server 192.234.1.3:8083; # Stalber
+    server 192.234.1.4:8084; # Severny
+}
+
+server {
+    listen 14000;
+    server_name mylta.it02.com;
+
+    location / {
+        proxy_pass http://mylta;
+    }
+}
+
+server {
+    listen 14400;
+    server_name mylta.it02.com;
+
+    location / {
+        proxy_pass http://mylta;
+    }
+}
+
+server {
+    listen 80 default_server;
+    server_name _;
+
+    location / {
+        return 301 http://www.mylta.xxx.com$request_uri;
+    }
+}
+
+server {
+    listen 8082;
+    listen 8083;
+    listen 8084;
+    server_name 192.234.2.4;
+
+    return 404;
+}
+```
 
 ## Soal 19
 
 Karena probset sudah kehabisan ide masuk ke **salah satu** worker buatkan akses direktori listing yang mengarah ke resource worker2
 
+### Konfigurasi Nginx
+
+Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
+
+
+```
+upstream mylta {
+    server 192.234.1.2:8082; # Lipovka
+    server 192.234.1.3:8083; # Stalber
+    server 192.234.1.4:8084; # Severny
+}
+
+server {
+    listen 14000;
+    server_name mylta.it02.com;
+
+    location / {
+        proxy_pass http://mylta;
+    }
+}
+
+server {
+    listen 14400;
+    server_name mylta.it02.com;
+
+    location / {
+        proxy_pass http://mylta;
+    }
+}
+
+server {
+    listen 80 default_server;
+    server_name _;
+
+    location / {
+        return 301 http://www.mylta.xxx.com$request_uri;
+    }
+}
+
+server {
+    listen 8082;
+    listen 8083;
+    listen 8084;
+    server_name 192.234.2.4;
+
+    return 404;
+}
+
+server {
+    listen 80;
+    server_name tamat.it02.com www.tamat.it02.com;
+
+    location / {
+        autoindex on;
+        proxy_pass http://mylta;
+    }
+}
+```
+
 ## Soal 20
 
 Worker tersebut harus dapat di akses dengan **tamat.xxx.com** dengan alias **www.tamat.xxx.com**
+
+### Konfigurasi Nginx
+
+Pengerjaan sama dengan nomor 19
