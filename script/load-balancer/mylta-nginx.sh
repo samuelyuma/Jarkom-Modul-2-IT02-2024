@@ -119,7 +119,7 @@ server {
     server_name _;
 
     location / {
-        return 301 http://www.mylta.xxx.com$request_uri;
+        return 301 http://www.mylta.it02.com$request_uri;
     }
 }
 
@@ -165,7 +165,7 @@ server {
     server_name _;
 
     location / {
-        return 301 http://www.mylta.xxx.com$request_uri;
+        return 301 http://www.mylta.it02.com$request_uri;
     }
 }
 

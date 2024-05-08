@@ -235,7 +235,7 @@ zone "redzone.it02.com" {
 };
 ```
 
-b. Membuat DNS record pada `/etc/bind/it02/airdrop.it02.com`
+b. Membuat DNS record pada `/etc/bind/it02/redzone.it02.com`
 
 ```
 $TTL    604800
@@ -273,7 +273,7 @@ zone "loot.it02.com" {
 };
 ```
 
-b. Membuat DNS record pada `/etc/bind/it02/airdrop.it02.com`
+b. Membuat DNS record pada `/etc/bind/it02/loot.it02.com`
 
 ```
 $TTL    604800
@@ -299,9 +299,11 @@ service bind9 restart
 
 Pastikan domain-domain tersebut dapat diakses oleh seluruh komputer (client) yang berada di Erangel
 
-### Output
+### Testing
 
-Pengujian dilakukan pada node Ruins dan Apartments (Client)
+![Screenshot 2024-05-08 131723](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/0c7eed3e-3da0-4404-9412-75232324336c)
+![Screenshot 2024-05-08 131814](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/8a8b2a8b-8822-4801-8a6f-e06e772114e3)
+![Screenshot 2024-05-08 131853](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/58a0d9a4-b23d-42b2-aecd-952f98dbf2e9)
 
 ## Soal 6
 
@@ -318,7 +320,7 @@ zone "1.234.192.in-addr.arpa" {
 };
 ```
 
-b. Membuat DNS record pada `/etc/bind/it02/airdrop.it02.com`
+b. Membuat DNS record pada `/etc/bind/it02/redzone.it02.com`
 
 ```
 $TTL    604800
@@ -339,9 +341,9 @@ c. Merestart service dari bind9
 service bind9 restart
 ```
 
-### Output
+### Testing
 
-Pengujian dilakukan pada node Apartments (Client)
+![Screenshot 2024-05-08 130406](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/c55cfa5c-a0bf-401a-9a2e-b30d2485bf97)
 
 ## Soal 7
 
@@ -349,7 +351,7 @@ Akhir-akhir ini seringkali terjadi serangan siber ke DNS Server Utama, sebagai t
 
 ### Setup DNS pada DNS Master (Pochinki)
 
-a. Edit konfigurasi zone `airdrop.it02.com`, `redzone.it02.com`, dan `loot.it02.com` pada file `etc/bind/named.conf.local` menjadi seperti berikut ini
+a. Edit Setup zone `airdrop.it02.com`, `redzone.it02.com`, dan `loot.it02.com` pada file `etc/bind/named.conf.local` menjadi seperti berikut ini
 
 ```
 zone "airdrop.it02.com" {
@@ -426,13 +428,19 @@ d. Merestart service dari bind9
 service bind9 restart
 ```
 
+### Testing
+
+![Screenshot 2024-05-08 131400](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/ebb6e10b-7110-4799-82b6-f37de99445da)
+![Screenshot 2024-05-08 131533](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/33bba612-3e98-4b49-9df6-f39033097967)
+![Screenshot 2024-05-08 131616](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/3b3d0322-bf85-4c12-8f55-a49b30b59bb3)
+
 ## Soal 8
 
 Kamu juga diperintahkan untuk membuat subdomain khusus melacak airdrop berisi peralatan medis dengan subdomain **medkit.airdrop.xxxx.com** yang mengarah ke Lipovka
 
 ### Setup DNS pada DNS Master (Pochinki)
 
-a. Edit konfigurasi pada file `/etc/bind/it02/airdrop.it02.com` menjadi seperti berikut ini
+a. Edit Setup pada file `/etc/bind/it02/airdrop.it02.com` menjadi seperti berikut ini
 
 ```
 $TTL    604800
@@ -455,6 +463,10 @@ b. Merestart service dari bind9
 ```
 service bind9 restart
 ```
+
+### Testing
+
+![Screenshot 2024-05-08 171111](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/94976203-2f14-4ee6-a449-29e354711eca)
 
 ## Soal 9
 
@@ -505,7 +517,7 @@ zone "siren.redzone.it02.com" {
 };
 ```
 
-b. Membuat DNS record pada `/etc/bind/it02/airdrop.it02.com`
+b. Membuat DNS record pada `/etc/bind/it02/siren.redzone.it02.com`
 
 ```
 $TTL    604800
@@ -527,13 +539,17 @@ c. Merestart service dari bind9
 service bind9 restart
 ```
 
+### Testing
+
+![Screenshot 2024-05-08 132258](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/3de4ffea-e932-43ee-8ebe-d51450e0de68)
+
 ## Soal 10
 
 Markas juga meminta catatan kapan saja pesawat tempur tersebut menjatuhkan bom, maka buatlah subdomain baru di subdomain siren yaitu **log.siren.redzone.xxxx.com** serta aliasnya **www.log.siren.redzone.xxxx.com** yang juga mengarah ke Severny
 
 ### Setup DNS pada DNS Slave (Georgopol)
 
-a. Edit konfigurasi pada file `/etc/bind/siren/siren.redzone.it02.com` menjadi seperti berikut ini
+a. Edit Setup pada file `/etc/bind/siren/siren.redzone.it02.com` menjadi seperti berikut ini
 
 ```
 $TTL    604800
@@ -557,9 +573,13 @@ b. Merestart service dari bind9
 service bind9 restart
 ```
 
+### Testing
+
+![Screenshot 2024-05-08 132455](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/fbab47cb-7d42-40d6-9d02-160868460433)
+
 ## Soal 11
 
-Setelah pertempuran mereda, warga Erangel dapat kembali mengakses jaringan luar, tetapi **hanya** warga **Pochinki** saja yang dapat mengakses jaringan luar secara **langsung**. Buatlah konfigurasi agar warga Erangel yang berada diluar Pochinki dapat mengakses jaringan luar **melalui** DNS Server **Pochinki**
+Setelah pertempuran mereda, warga Erangel dapat kembali mengakses jaringan luar, tetapi **hanya** warga **Pochinki** saja yang dapat mengakses jaringan luar secara **langsung**. Buatlah Setup agar warga Erangel yang berada diluar Pochinki dapat mengakses jaringan luar **melalui** DNS Server **Pochinki**
 
 ### Setup DNS pada DNS Master (Pochinki)
 
@@ -600,13 +620,17 @@ b. Merestart service dari bind9
 service bind9 restart
 ```
 
+### Testing
+
+![Screenshot 2024-05-08 172612](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/1777e79b-2062-4bf9-9d2d-3f52ce32b8a7)
+
 ## Soal 12
 
 Karena pusat ingin sebuah website yang ingin digunakan untuk memantau kondisi markas lainnya maka deploy lah webiste ini (cek resource yg lb) pada **severny** menggunakan **apache**
 
-### Setup website pada severny
+### Setup Website pada Severny
 
-a. Instalasi dependencies yang diperlukan 
+a. Instalasi dependencies yang diperlukan
 
 ```
 apt-get update
@@ -619,7 +643,7 @@ b. Buat file `it02.conf` pada `/etc/apache2/sites-available/`
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/it02.conf
 ```
 
-c. Hapus file `000-default.conf` pada `/etc/apache2/sites-enabled/` 
+c. Hapus file `000-default.conf` pada `/etc/apache2/sites-enabled/`
 
 ```
 rm /etc/apache2/sites-enabled/000-default.conf
@@ -649,7 +673,7 @@ Listen 8080
 </IfModule>
 ```
 
-f. Nyalakan situs web yang telah di konfigurasi pada `it02.conf`
+f. Nyalakan situs web yang telah di Setup pada `it02.conf`
 
 ```
 a2ensite it02.conf
@@ -671,16 +695,19 @@ $ rm -rf /var/www/html/configuration/
 
 h. Nyalakan service apache
 
-
 ```
 service apache2 start
 ```
 
-i. Gunakan lynx untuk membuka website seperti berikut ini
+### Testing
+
+Untuk mengecek apakah website berjalan atau tidak, dapat menggunakan command berikut:
 
 ```
 lynx 192.234.1.4/index.php
 ```
+
+![Screenshot 2024-05-08 175329](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/681e871d-d19e-4a5c-8558-caf9e33b675b)
 
 ## Soal 13
 
@@ -688,7 +715,7 @@ Tapi pusat merasa tidak puas dengan performanya karena traffic yag tinggi maka p
 
 ### Setup worker pada Severny, Stalber, dan Lipovka
 
-a. Instalasi dependencies yang diperlukan 
+a. Instalasi dependencies yang diperlukan
 
 ```
 apt-get update
@@ -701,7 +728,7 @@ b. Buat file `it02.conf` pada `/etc/apache2/sites-available/`
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/it02.conf
 ```
 
-c. Hapus file `000-default.conf` pada `/etc/apache2/sites-enabled/` 
+c. Hapus file `000-default.conf` pada `/etc/apache2/sites-enabled/`
 
 ```
 rm /etc/apache2/sites-enabled/000-default.conf
@@ -731,14 +758,13 @@ Listen 8080
 </IfModule>
 ```
 
-f. Nyalakan situs web yang telah di konfigurasi pada `it02.conf`
+f. Nyalakan situs web yang telah di Setup pada `it02.conf`
 
 ```
 a2ensite it02.conf
 ```
 
 g. Unduh file `index.php`, dan letakkan pada `/var/www/html/`
-
 
 ```
 $ mkdir -p /var/www/html/configuration/
@@ -760,7 +786,7 @@ service apache2 start
 
 ### Setup load balancer pada MyIta
 
-a. Instalasi dependencies yang diperlukan 
+a. Instalasi dependencies yang diperlukan
 
 ```
 apt-get update
@@ -802,7 +828,7 @@ d. Edit file `default-8080.conf` pada `/etc/apache2/sites-available/` menjadi se
 </VirtualHost>
 ```
 
-f. Nyalakan konfigurasi pada `it02.conf`
+f. Nyalakan Setup pada `it02.conf`
 
 ```
 a2ensite it02.conf
@@ -814,32 +840,54 @@ g. restart service apache
 service apache2 restart
 ```
 
+### Testing
+
+Untuk mengecek apakah website berjalan atau tidak, dapat menggunakan command berikut:
+
+```
+lynx 192.234.1.2:8080/index.php
+```
+
+![Screenshot 2024-05-08 175254](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/a2acb611-6053-4aed-8281-b3a821e831f5)
+
+```
+lynx 192.234.1.3:8080/index.php
+```
+
+![Screenshot 2024-05-08 175312](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/ba9853a1-cee1-4205-9226-5dccfef820fe)
+
+```
+lynx 192.234.1.4:8080/index.php
+```
+
+![Screenshot 2024-05-08 175329](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/681e871d-d19e-4a5c-8558-caf9e33b675b)
+
 ## Soal 14
 
 Mereka juga belum merasa puas jadi pusat meminta agar web servernya dan load balancer nya diubah menjadi nginx
 
-### Setup worker pada Severny, Stalber, dan Lipovka
+### Setup Worker pada Severny, Stalber, dan Lipovka
 
-a. Instalasi dependencies yang diperlukan 
+a. Instalasi dependencies yang diperlukan
 
 ```
 apt-get update
 apt-get install dnsutils lynx nginx apache2 libapache2-mod-php7.0 wget unzip php php-fpm -y
 ```
 
-b. nyalakan service php-fpm
+b. Nyalakan service php-fpm
 
 ```
 service php7.0-fpm start
 ```
 
-c. nyalakan service nginx
+c. Nyalakan service nginx
 
 ```
 service nginx start
 ```
 
-d. unduh `index.php` dan letakkan pada `/var/www/html/`
+d. Unduh file `index.php` dan letakkan pada `/var/www/html/`
 
 ```
 $ mkdir -p /var/www/html/configuration/
@@ -883,7 +931,7 @@ server {
 }
 ```
 
-f. buat symlink `it02` pada `/etc/nginx/sites-available/` di `/etc/nginx/sites-enabled`
+f. Buat symlink `it02` pada `/etc/nginx/sites-available/` di `/etc/nginx/sites-enabled`
 
 ```
 ln -s /etc/nginx/sites-available/it02 /etc/nginx/sites-enabled
@@ -903,26 +951,27 @@ service nginx restart
 
 ### Setup Load Balancer pada MyIta
 
-a. Instalasi dependencies yang diperlukan 
+a. Instalasi dependencies yang diperlukan
 
 ```
 apt-get update
 apt-get install dnsutils nginx php-fpm php -y
 ```
 
-b. nyalakan service php-fpm
+b. Nyalakan service php-fpm
 
 ```
 service php7.0-fpm start
 ```
 
-c. nyalakan service nginx
+c. Nyalakan service nginx
 
 ```
 service nginx start
 ```
 
 d. Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
+
 ```
 upstream mylta {
     server 192.234.1.2:8082; # Lipovka
@@ -958,13 +1007,13 @@ server {
 }
 ```
 
-e. buat symlink `it02` pada `/etc/nginx/sites-available/` di `/etc/nginx/sites-enabled`
+e. Buat symlink `it02` pada `/etc/nginx/sites-available/` di `/etc/nginx/sites-enabled`
 
 ```
 ln -s /etc/nginx/sites-available/it02 /etc/nginx/sites-enabled
 ```
 
-f. hapus `default` pada `/etc/nginx/sites-enabled/`
+f. Hapus `default` pada `/etc/nginx/sites-enabled/`
 
 ```
 rm /etc/nginx/sites-enabled/default
@@ -975,6 +1024,28 @@ g. Restart service nginx
 ```
 service nginx restart
 ```
+
+### Testing
+
+Untuk mengecek apakah website berjalan atau tidak, dapat menggunakan command berikut:
+
+```
+lynx 192.234.1.2:8082/index.php
+```
+
+![Screenshot 2024-05-08 175254](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/a2acb611-6053-4aed-8281-b3a821e831f5)
+
+```
+lynx 192.234.1.3:8083/index.php
+```
+
+![Screenshot 2024-05-08 175312](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/ba9853a1-cee1-4205-9226-5dccfef820fe)
+
+```
+lynx 192.234.1.4:8084/index.php
+```
+
+![Screenshot 2024-05-08 175329](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/681e871d-d19e-4a5c-8558-caf9e33b675b)
 
 ## Soal 15
 
@@ -989,11 +1060,52 @@ Markas pusat meminta laporan hasil benchmark dengan menggunakan apache benchmark
 
 Karena dirasa kurang aman karena masih memakai IP markas ingin akses ke mylta memakai **mylta.xxx.com** dengan alias **www.mylta.xxx.com** (sesuai web server terbaik hasil analisis kalian)
 
+### Setup DNS pada Pochinki (DNS Master)
+
+### Setup DNS pada DNS Master (Pochinki)
+
+a. Menambahkan line berikut pada file `etc/bind/named.conf.local`
+
+```
+zone "mylta.it02.com" {
+ 		type master;
+ 		file "/etc/bind/it02/mylta.it02.com";
+ };
+```
+
+b. Membuat DNS record pada `/etc/bind/it02/mylta.it02.com`
+
+```
+; BIND data file for Mylta domain to Mylta (Soal 16)
+$TTL    604800
+@       IN      SOA     mylta.it02.com. root.mylta.it02.com. (
+                        2				; Serial
+                        604800			; Refresh
+                        86400			; Retry
+                        2419200         ; Expire
+                        604800 )		; Negative Cache TTL
+;
+@       IN      NS      mylta.it02.com.
+@       IN      A       192.234.2.4 ; IP MyIta
+www     IN      CNAME   mylta.it02.com.
+```
+
+c. Merestart service dari bind9
+
+```
+service bind9 restart
+```
+
+### Testing
+
+![Screenshot 2024-05-08 195926](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/940e0d18-d967-4645-a613-d307794a05cf)
+![Screenshot 2024-05-08 200004](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/c24acc61-56f8-445f-ae74-11d6a5879f5c)
+
 ## Soal 17
 
-Agar aman, buatlah konfigurasi agar **mylta.xxx.com** hanya dapat diakses melalui port 14000 dan 14400.
+Agar aman, buatlah Setup agar **mylta.xxx.com** hanya dapat diakses melalui port 14000 dan 14400.
 
-### Konfigurasi Nginx
+### Setup Nginx
 
 Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
 
@@ -1032,11 +1144,27 @@ server {
 }
 ```
 
+### Testing
+
+Untuk mengecek apakah **mylta.xxx.com** hanya dapat diakses melalui port 14000 dan 14400, dapat menggunakan command berikut:
+
+```
+lynx mylta.it02.com:14000
+```
+
+![Screenshot 2024-05-08 175254](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/a2acb611-6053-4aed-8281-b3a821e831f5)
+
+```
+lynx mylta.it02.com:14400
+```
+
+![Screenshot 2024-05-08 175312](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/ba9853a1-cee1-4205-9226-5dccfef820fe)
+
 ## Soal 18
 
 Apa bila ada yang mencoba mengakses IP mylta akan secara otomatis dialihkan ke **www.mylta.xxx.com**
 
-### Konfigurasi Nginx
+### Setup Nginx
 
 Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
 
@@ -1088,10 +1216,13 @@ server {
 
 Karena probset sudah kehabisan ide masuk ke **salah satu** worker buatkan akses direktori listing yang mengarah ke resource worker2
 
-### Konfigurasi Nginx
+## Soal 20
+
+Worker tersebut harus dapat di akses dengan **tamat.xxx.com** dengan alias **www.tamat.xxx.com**
+
+### Setup Nginx pada Mylta
 
 Edit file `it02` pada `/etc/nginx/sites-available/` menjadi seperti berikut ini
-
 
 ```
 upstream mylta {
@@ -1147,10 +1278,6 @@ server {
 }
 ```
 
-## Soal 20
+### Testing
 
-Worker tersebut harus dapat di akses dengan **tamat.xxx.com** dengan alias **www.tamat.xxx.com**
-
-### Konfigurasi Nginx
-
-Pengerjaan sama dengan nomor 19
+![Screenshot 2024-05-08 29472712](https://github.com/samuelyuma/Jarkom-Modul-2-IT02-2024/assets/118542326/16a16817-253b-4911-95ae-39fa708cb841)
